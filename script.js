@@ -1,14 +1,12 @@
 "Use strict";
 
-let title, screens, screenPrice, rollback, fullPrice, adaptive;
-
 // 1
-title = "JS22-homework";
-screens = "Простые, Сложные, Интерактивные";
-screenPrice = 1200;
-rollback = 20;
-fullPrice = 10000;
-adaptive = true;
+let title = "JS22-homework",
+  screens = "Простые, Сложные, Интерактивные",
+  screenPrice = 1200,
+  rollback = 20,
+  fullPrice = 10000,
+  adaptive = true;
 
 // 2
 console.log(typeof title);
