@@ -1,6 +1,7 @@
 "Use strict";
 const CANCEL = "Ввод отменен";
-
+let fullPrice;
+// Валидация prompt на полуение строки с отсечением пробелов (запрет ввода только пробелов))
 const validPrompt = (text) => {
   let t;
   do {
@@ -11,6 +12,7 @@ const validPrompt = (text) => {
   return t === "null" ? (t = false) : t;
 };
 
+// Валидация prompt на полуение целого положительного числа
 const validPromptNumber = (text) => {
   let t = prompt(text);
   if (t === null) {
@@ -26,113 +28,130 @@ const validPromptNumber = (text) => {
       break;
     }
   }
-  // console.log(t === null ? "" : +t);
   return t === null ? false : +t;
 };
 
-//1 Название проекта
-let title = validPrompt("Как называется Ваш проект?");
+// Вывод логов и типов данных
+const showTypeOf = (data) => {
+  console.log(data + `, (${typeof data})`);
+};
 
-//2 Типы экранов
-let screens = title
-  ? validPrompt(
-      "Какие типы экранов нужно разработать? (Простые/Сложные/Интерактивные)"
-    )
-  : false;
-if (screens) {
-  while (
-    screens !== false &&
-    screens.toLowerCase() !== "простые" &&
-    screens.toLowerCase() !== "сложные" &&
-    screens.toLowerCase() !== "интерактивные"
-  ) {
-    screens = validPrompt(
-      "ОШИБКА\nМожно ввести только 'Простые', 'Сложные' или 'Интерактивные'"
-    );
+// Название проекта (string)
+const getTitle = () => {
+  let title = validPrompt("Как называется Ваш проект?");
+  if (title) {
+    title = title.toLowerCase();
+    title = title[0].toUpperCase() + title.substring(1);
   }
-}
+  return title;
+};
 
-//3 Стоимость работы
-let screenPrice = screens
-  ? validPromptNumber("Сколько будет стоить данная работа?")
-  : false;
-
-//4 Адапитив
-let adaptive = screenPrice
-  ? validPrompt("Нужен ли адаптив на сайте? (Да/Нет)")
-  : false;
-
-if (adaptive) {
-  while (
-    adaptive.toLowerCase() !== "да" &&
-    adaptive.toLowerCase() !== "нет" &&
-    adaptive !== CANCEL
-  ) {
-    adaptive = validPrompt(
-      "Можно ввести только 'да' или 'нет' (Регистр не важен)"
-    ).toLowerCase();
-    if (adaptive === CANCEL) break;
+// Типы экранов (string)
+const getScreens = () => {
+  let screens = validPrompt(
+    "Какие типы экранов нужно разработать? (Простые/Сложные/Интерактивные)"
+  );
+  if (screens) {
+    while (
+      screens !== false &&
+      screens.toLowerCase() !== "простые" &&
+      screens.toLowerCase() !== "сложные" &&
+      screens.toLowerCase() !== "интерактивные"
+    ) {
+      screens = validPrompt(
+        "ОШИБКА\nМожно ввести только 'Простые', 'Сложные' или 'Интерактивные'"
+      );
+    }
   }
-  adaptive = adaptive === "да" ? true : false;
-  // console.log(adaptive);
-}
+  return String(screens).split("");
+};
 
-//5 Доп. услуги
+// Адапитив (boolean)
+const isAdaptive = () => {
+  let adaptive = validPrompt("Нужен ли адаптив на сайте? (Да/Нет)");
 
-let addOption1 = screenPrice
-  ? validPrompt("Если нужен дополнительный тип услуги, то укажите какой:")
-  : false;
+  if (adaptive) {
+    while (
+      adaptive.toLowerCase() !== "да" &&
+      adaptive.toLowerCase() !== "нет" &&
+      adaptive !== CANCEL
+    ) {
+      adaptive = validPrompt(
+        "Можно ввести только 'да' или 'нет' (Регистр не важен)"
+      ).toLowerCase();
+      if (adaptive === CANCEL) break;
+    }
 
-let addOptPrice1 = addOption1
-  ? validPromptNumber("Сколько это будет стоить?")
-  : false;
+    return adaptive === "да" ? true : false;
+  }
+};
 
-let addOption2 = addOptPrice1
-  ? validPrompt(
-      "Возможно, Вы хотите добавить еще один тип услуги?\nЕсли да, то укажите какой:"
-    )
-  : false;
+// Стоимость работы (number)
+const getScreenPrice = () => {
+  return validPromptNumber("Сколько будет стоить данная работа?");
+};
 
-let addOptPrice2 = addOption2
-  ? validPromptNumber("Сколько это будет стоить?")
-  : false;
+// Доп. услуги (number)
+const getAllServicePrices = () => {
+  let addOption1 = validPrompt(
+    "Если нужен дополнительный тип услуги, то укажите какой:"
+  );
 
-//6 Итоговая стоимость
-let fullPrice = screenPrice ? screenPrice + addOptPrice1 + addOptPrice2 : 0;
-let rollback = fullPrice * 0.2;
-let servicePercentPrice = Math.ceil(fullPrice - rollback);
+  let addOptPrice1 = addOption1
+    ? validPromptNumber("Сколько это будет стоить?")
+    : false;
 
-// Вывод переменных и типов данных в них
-console.log(`title = ${title} (${typeof title})`);
-console.log(`screens = ${screens} (${typeof screens})`);
-console.log(`screenPrice = ${screenPrice} (${typeof screenPrice})`);
-console.log(`adaptive = ${adaptive} (${typeof adaptive})`);
-console.log(`addOption1 = ${addOption1} (${typeof addOption1})`);
-console.log(`addOptPrice1 = ${addOptPrice1} (${typeof addOptPrice1})`);
-console.log(`addOption2 = ${addOption2} (${typeof addOption2})`);
-console.log(`addOptPrice2 = ${addOptPrice2} (${typeof addOptPrice2})`);
-console.log(`fullPrice = ${fullPrice} (${typeof fullPrice})`);
-console.log(
-  `servicePercentPrice = ${servicePercentPrice} (${typeof servicePercentPrice})`
-);
+  let addOption2 = addOptPrice1
+    ? validPrompt(
+        "Возможно, Вы хотите добавить еще один тип услуги?\nЕсли да, то укажите какой:"
+      )
+    : false;
 
-// Скидка
-switch (true) {
-  case fullPrice > 30000:
-    console.log("Даем скидку в 10%");
-    break;
+  let addOptPrice2 = addOption2
+    ? validPromptNumber("Сколько это будет стоить?")
+    : false;
 
-  case fullPrice >= 15000 && fullPrice <= 30000:
-    console.log("Даем скидку в 5%");
-    break;
+  return +addOptPrice1 + addOptPrice2;
+};
 
-  case fullPrice >= 0 && fullPrice < 15000:
-    console.log("Скидка не предусмотрена");
-    break;
+// Итоговая стоимость (number)
+const getFullPrice = () => getScreenPrice() + getAllServicePrices();
 
-  case fullPrice < 0:
-    console.log("Что то пошло не так");
-    break;
-}
+// Cтоимость за вычетом отката посреднику (number)
+const getServicePercentPrices = (fullPrice, percent) =>
+  Math.ceil(fullPrice - (fullPrice * percent) / 100);
+
+// Скидка (string)
+const getDiscountInfo = (fullPrice) => {
+  switch (true) {
+    case fullPrice > 30000:
+      return "Даем скидку в 10%";
+      break;
+
+    case fullPrice >= 15000 && fullPrice <= 30000:
+      return "Даем скидку в 5%";
+      break;
+
+    case fullPrice >= 0 && fullPrice < 15000:
+      return "Скидка не предусмотрена";
+      break;
+
+    case fullPrice < 0:
+      return "Что то пошло не так";
+      break;
+  }
+};
+
+// Функциональный блок
+
+showTypeOf(getTitle());
+showTypeOf(getScreens());
+showTypeOf(isAdaptive());
+
+fullPrice = getFullPrice();
+showTypeOf(fullPrice);
+
+showTypeOf(getServicePercentPrices(fullPrice, 15));
+showTypeOf(getDiscountInfo(fullPrice));
 
 // ₽
