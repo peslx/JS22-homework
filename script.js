@@ -1,45 +1,10 @@
 "Use strict";
-const CANCEL = "Ввод отменен";
 let fullPrice;
-// Валидация prompt на полуение строки с отсечением пробелов (запрет ввода только пробелов))
-const validPrompt = (text) => {
-  let t;
-  do {
-    t = String(prompt(text));
-    t = t.trim();
-  } while (t === "");
-  t === "null" ? console.log(CANCEL) : null;
-  return t === "null" ? (t = false) : t;
-};
-
-// Валидация prompt на полуение целого положительного числа
-const validPromptNumber = (text) => {
-  let t = prompt(text);
-  if (t === null) {
-    console.log(CANCEL);
-    return false;
-  }
-  while (isNaN(+t) || +t <= 0 || !parseInt(+t)) {
-    t = prompt(
-      "ОШИБКА\nВведено некорректное значение. Можно указать только целое, положительно число."
-    );
-    if (t === null) {
-      console.log(CANCEL);
-      break;
-    }
-  }
-  return t === null ? false : +t;
-};
-
-// Вывод логов и типов данных
-const showTypeOf = (data) => {
-  console.log(data + `, (${typeof data})`);
-};
-
 // Название проекта (string)
 const getTitle = () => {
-  let title = validPrompt("Как называется Ваш проект?");
+  let title = prompt("Как называется Ваш проект?");
   if (title) {
+    title = title.trim();
     title = title.toLowerCase();
     title = title[0].toUpperCase() + title.substring(1);
   }
@@ -48,68 +13,37 @@ const getTitle = () => {
 
 // Типы экранов (string)
 const getScreens = () => {
-  let screens = validPrompt(
-    "Какие типы экранов нужно разработать? (Простые/Сложные/Интерактивные)"
+  let screens = prompt(
+    "Какие типы экранов нужно разработать? (Простые, Сложные, Интерактивные)"
   );
-  if (screens) {
-    while (
-      screens !== false &&
-      screens.toLowerCase() !== "простые" &&
-      screens.toLowerCase() !== "сложные" &&
-      screens.toLowerCase() !== "интерактивные"
-    ) {
-      screens = validPrompt(
-        "ОШИБКА\nМожно ввести только 'Простые', 'Сложные' или 'Интерактивные'"
-      );
-    }
-  }
-  return String(screens).split("");
+  return screens.split(", ");
 };
 
 // Адапитив (boolean)
 const isAdaptive = () => {
-  let adaptive = validPrompt("Нужен ли адаптив на сайте? (Да/Нет)");
-
-  if (adaptive) {
-    while (
-      adaptive.toLowerCase() !== "да" &&
-      adaptive.toLowerCase() !== "нет" &&
-      adaptive !== CANCEL
-    ) {
-      adaptive = validPrompt(
-        "Можно ввести только 'да' или 'нет' (Регистр не важен)"
-      ).toLowerCase();
-      if (adaptive === CANCEL) break;
-    }
-
-    return adaptive === "да" ? true : false;
-  }
+  return confirm("Нужен ли адаптив на сайте?");
 };
 
 // Стоимость работы (number)
 const getScreenPrice = () => {
-  return validPromptNumber("Сколько будет стоить данная работа?");
+  return prompt("Сколько будет стоить данная работа?");
 };
 
 // Доп. услуги (number)
 const getAllServicePrices = () => {
-  let addOption1 = validPrompt(
+  let addOption1 = prompt(
     "Если нужен дополнительный тип услуги, то укажите какой:"
   );
 
-  let addOptPrice1 = addOption1
-    ? validPromptNumber("Сколько это будет стоить?")
-    : false;
+  let addOptPrice1 = addOption1 ? prompt("Сколько это будет стоить?") : false;
 
-  let addOption2 = addOptPrice1
-    ? validPrompt(
+  let addOption2 = addOption1
+    ? prompt(
         "Возможно, Вы хотите добавить еще один тип услуги?\nЕсли да, то укажите какой:"
       )
     : false;
 
-  let addOptPrice2 = addOption2
-    ? validPromptNumber("Сколько это будет стоить?")
-    : false;
+  let addOptPrice2 = addOption2 ? prompt("Сколько это будет стоить?") : false;
 
   return +addOptPrice1 + addOptPrice2;
 };
@@ -142,15 +76,23 @@ const getDiscountInfo = (fullPrice) => {
   }
 };
 
+// Вывод логов и типов данных
+const showTypeOf = (data) => {
+  console.log(data + " " + typeof data);
+};
+
 // Функциональный блок
 
 showTypeOf(getTitle());
-showTypeOf(getScreens());
+
+// showTypeOf(getScreens());
+console.log(getScreens());
+
 showTypeOf(isAdaptive());
 
 fullPrice = getFullPrice();
-showTypeOf(fullPrice);
 
+showTypeOf(fullPrice);
 showTypeOf(getServicePercentPrices(fullPrice, 15));
 showTypeOf(getDiscountInfo(fullPrice));
 
