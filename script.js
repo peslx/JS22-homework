@@ -1,8 +1,15 @@
 "Use strict";
+
+let title;
+let screens;
+let adaptive;
 let fullPrice;
+let servicePercentPrices;
+let discountInfo;
+
 // Название проекта (string)
 const getTitle = () => {
-  let title = prompt("Как называется Ваш проект?");
+  let title = prompt("Как называется Ваш проект?", "Новый проект");
   if (title) {
     title = title.trim();
     title = title.toLowerCase();
@@ -14,7 +21,8 @@ const getTitle = () => {
 // Типы экранов (string)
 const getScreens = () => {
   let screens = prompt(
-    "Какие типы экранов нужно разработать? (Простые, Сложные, Интерактивные)"
+    "Какие типы экранов нужно разработать",
+    "Простые, Сложные, Интерактивные"
   );
   return screens.split(", ");
 };
@@ -24,28 +32,66 @@ const isAdaptive = () => {
   return confirm("Нужен ли адаптив на сайте?");
 };
 
+// Проверка на число (boolean)
+const isNum = (num) => {
+  return !isNaN(parseFloat(num)) && isFinite(num) && !String(num).includes(" ");
+};
+
 // Стоимость работы (number)
 const getScreenPrice = () => {
-  return prompt("Сколько будет стоить данная работа?");
+  let screenPrice;
+  do {
+    screenPrice = prompt(
+      "Сколько будет стоить данная работа?",
+      "    100000n  "
+    );
+  } while (!isNum(screenPrice) && screenPrice !== null);
+  return +screenPrice;
 };
 
 // Доп. услуги (number)
 const getAllServicePrices = () => {
   let addOption1 = prompt(
-    "Если нужен дополнительный тип услуги, то укажите какой:"
+    "Если нужен дополнительный тип услуги, то укажите какой:",
+    "Админ-панель"
   );
 
-  let addOptPrice1 = addOption1 ? prompt("Сколько это будет стоить?") : false;
+  let addOptPrice1;
+  if (addOption1) {
+    do {
+      addOptPrice1 = prompt("Сколько это будет стоить?", 5000);
+    } while (!isNum(addOptPrice1) && addOptPrice1 !== null);
 
-  let addOption2 = addOption1
+    if (addOptPrice1 === null) {
+      addOptPrice1 = 0;
+    } else {
+      addOptPrice1 = isNaN(+addOptPrice1) ? 0 : +addOptPrice1;
+    }
+  }
+
+  let addOption2 = addOptPrice1
     ? prompt(
-        "Возможно, Вы хотите добавить еще один тип услуги?\nЕсли да, то укажите какой:"
+        "Возможно, Вы хотите добавить еще один тип услуги?\nЕсли да, то укажите какой:",
+        "База данных"
       )
     : false;
 
-  let addOptPrice2 = addOption2 ? prompt("Сколько это будет стоить?") : false;
+  let addOptPrice2;
+  if (addOption2 && addOption2 !== null) {
+    do {
+      addOptPrice2 = prompt("Сколько это будет стоить?", 3500);
+    } while (!isNum(addOptPrice2) && addOptPrice2 !== null);
 
-  return +addOptPrice1 + addOptPrice2;
+    if (addOptPrice2 === null) {
+      addOptPrice2 = 0;
+    } else {
+      addOptPrice2 = isNaN(+addOptPrice2) ? 0 : +addOptPrice2;
+    }
+  } else {
+    addOptPrice2 = 0;
+  }
+
+  return addOptPrice1 ? +addOptPrice1 + addOptPrice2 : 0;
 };
 
 // Итоговая стоимость (number)
@@ -81,19 +127,24 @@ const showTypeOf = (data) => {
   console.log(data + " " + typeof data);
 };
 
+// Старт ввода данных
+const startQuiz = () => {
+  title = getTitle();
+  screens = getScreens();
+  adaptive = isAdaptive();
+  fullPrice = getFullPrice();
+};
+
 // Функциональный блок
+startQuiz();
+servicePercentPrices = getServicePercentPrices(fullPrice, 15);
+discountInfo = getDiscountInfo(fullPrice);
 
-showTypeOf(getTitle());
-
-// showTypeOf(getScreens());
-console.log(getScreens());
-
-showTypeOf(isAdaptive());
-
-fullPrice = getFullPrice();
-
+showTypeOf(title);
+console.log(screens);
+showTypeOf(adaptive);
 showTypeOf(fullPrice);
-showTypeOf(getServicePercentPrices(fullPrice, 15));
-showTypeOf(getDiscountInfo(fullPrice));
+showTypeOf(servicePercentPrices);
+showTypeOf(discountInfo);
 
 // ₽
