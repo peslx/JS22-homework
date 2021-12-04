@@ -26,19 +26,20 @@
 
 Программа должны быть выполнена с помощью рекурсии, без единого цикла.
 */
-const castNumber = (n) => Math.floor(Math.random() * n + 1);
 
 const isNum = (num) => {
   return !isNaN(parseFloat(num)) && isFinite(num) && !String(num).includes(" ");
 };
 
-const init = function () {
+const castNumber = (n) => Math.floor(Math.random() * n + 1);
+
+function gameStart() {
   const num = castNumber(100);
   let tryes = 10;
   console.log(num);
-  const tryGuess = function (text) {
+  return function tryGuess(text) {
     let guessNum = prompt(text);
-    // console.log(guessNum + " " + typeof guessNum);
+
     if (isNum(guessNum)) {
       if (tryes === 1) {
         let continueGame = confirm("Попытки закончились, хотите сыграть еще?");
@@ -50,17 +51,18 @@ const init = function () {
           return;
         }
       }
+
       tryes--;
       guessNum = +guessNum;
-      // console.log(guessNum + " " + typeof guessNum);
+
       if (guessNum !== num) {
         if (guessNum < num) {
           guessNum = tryGuess(
-            `Загаданное число больше, осталось попыток: ${tryes}.\n Попробуйте еще раз`
+            `Загаданное число больше, осталось попыток: ${tryes}.\nПопробуйте еще раз`
           );
         } else if (guessNum > num) {
           guessNum = tryGuess(
-            `Загаданное число меньше, осталось попыток: ${tryes}.\n Попробуйте еще раз`
+            `Загаданное число меньше, осталось попыток: ${tryes}.\nПопробуйте еще раз`
           );
         }
       } else if (guessNum === num) {
@@ -82,7 +84,11 @@ const init = function () {
       guessNum = tryGuess("Введите число!");
     }
   };
-  tryGuess("Угадайте число от 1 до 100");
-};
+}
+
+function init() {
+  const start = gameStart();
+  start("Угадайте число от 1 до 100");
+}
 
 init();
