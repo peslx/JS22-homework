@@ -3,7 +3,7 @@
 const app = {
   data: {
     title: "",
-    screens: "",
+    screens: [],
     adaptive: "",
     rollback: 15,
     screenPrice: 0,
@@ -13,30 +13,6 @@ const app = {
     servicePercentPrices: 0,
     discountInfo: "",
   },
-  // Название проекта (string)
-  getTitle: () => {
-    let title = prompt("Как называется Ваш проект?", "Новый проект");
-    if (title) {
-      title = title.trim();
-      title = title.toLowerCase();
-      title = title[0].toUpperCase() + title.substring(1);
-    }
-    app.data.title = title;
-  },
-
-  // Типы экранов (string)
-  getScreens: () => {
-    let screens = prompt(
-      "Какие типы экранов нужно разработать",
-      "Простые, Сложные, Интерактивные"
-    );
-    app.data.screens = screens.split(", ");
-  },
-
-  // Адапитив (boolean)
-  isAdaptive: () => {
-    app.data.adaptive = confirm("Нужен ли адаптив на сайте?");
-  },
 
   // Проверка на число (boolean)
   isNum: (num) => {
@@ -45,25 +21,88 @@ const app = {
     );
   },
 
+  // Название проекта (string)
+  getTitle: () => {
+    let title;
+    do {
+      title = prompt("Как называется Ваш проект?", "Новый проект");
+      if (title) {
+        title = title.trim();
+        title = title.toLowerCase();
+        title = title[0].toUpperCase() + title.substring(1);
+      }
+    } while (!isNaN(+title) && title !== null);
+
+    // let title = prompt("Как называется Ваш проект?", "Новый проект");
+    // if (title) {
+    //   title = title.trim();
+    //   title = title.toLowerCase();
+    //   title = title[0].toUpperCase() + title.substring(1);
+    // }
+
+    app.data.title = title;
+  },
+
+  // Типы экранов (string)
+  getScreens: () => {
+    for (let i = 0; i < 2; i++) {
+      let name;
+
+      do {
+        name = prompt(
+          "Какие типы экранов нужно разработать",
+          "Простые, Сложные, Интерактивные"
+        );
+        if (name) {
+          name = name.trim();
+          name = name.toLowerCase();
+          name = name[0].toUpperCase() + name.substring(1);
+        }
+      } while (!isNaN(+name) && name !== null);
+
+      let price = 0;
+
+      do {
+        price = prompt("Сколько будет стоить данная работа?", "    100000n  ");
+      } while (!app.isNum(price) && price !== null);
+
+      app.data.screens.push({ id: i, name, price: +price });
+    }
+  },
+
+  // Адапитив (boolean)
+  isAdaptive: () => {
+    app.data.adaptive = confirm("Нужен ли адаптив на сайте?");
+  },
+
   // Стоимость работы (number)
   getScreenPrice: () => {
-    let screenPrice;
-    do {
-      screenPrice = prompt(
-        "Сколько будет стоить данная работа?",
-        "    100000n  "
-      );
-    } while (!app.isNum(screenPrice) && screenPrice !== null);
-    app.data.screenPrice = +screenPrice;
+    //   for (const screen of app.data.screens) {
+    //     app.data.screenPrice += +screen.price;
+    //   }
+
+    app.data.screenPrice = app.data.screens.reduce((total, screen) => {
+      return total + screen.price;
+    }, app.data.screenPrice);
   },
 
   // Доп. услуги (number)
   getAllServicePrices: () => {
     for (let i = 0; i < 2; i++) {
-      let name = prompt(
-        "Если нужен дополнительный тип услуги, то укажите какой:",
-        "Админ-панель/База данных"
-      );
+      let name;
+
+      do {
+        name = prompt(
+          "Если нужен дополнительный тип услуги, то укажите какой:",
+          "Админ-панель/База данных"
+        );
+        if (name) {
+          name = name.trim();
+          name = name.toLowerCase();
+          name = name[0].toUpperCase() + name.substring(1);
+        }
+      } while (!isNaN(+name) && name !== null);
+
       let price = 0;
 
       do {
@@ -75,7 +114,6 @@ const app = {
     for (const key in app.data.services) {
       app.data.allServicePrices += app.data.services[key];
     }
-    console.log(JSON.stringify(app.data.services));
   },
 
   // Итоговая стоимость (number)
@@ -121,19 +159,14 @@ const app = {
     app.getDiscountInfo(app.data.fullPrice);
   },
 
-  logger: (obj) => {
-    for (const key in obj) {
-      if (obj.hasOwnProperty.call(obj, key)) {
-        const el = obj[key];
-        console.log(`(***${typeof el}***)\n${el}`);
-        if (typeof el === "object") app.logger(el);
-      }
-    }
+  logger: () => {
+    console.log(app.data);
   },
 
   start: () => {
     app.startQuiz();
-    app.logger(app);
+    // app.logger(app);
+    app.logger();
   },
 };
 
