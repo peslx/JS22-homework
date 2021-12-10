@@ -1,5 +1,40 @@
 "Use strict";
 
+const title = document.getElementsByTagName("h1")[0];
+const calculateBtn = document.getElementsByClassName("handler_btn")[0];
+const defaultBtn = document.getElementsByClassName("handler_btn")[1];
+const addBtn = document.querySelector(".screen-btn");
+const percentItems = document.querySelectorAll(".other-items.percent");
+const numberItems = document.querySelectorAll(".other-items.number");
+const rangeInput = document.querySelector(".rollback ").querySelector("input");
+const rangeSpan = document.querySelector(".rollback ").querySelector("span ");
+
+const inputs = document.getElementsByClassName("total-input");
+const total = inputs[0];
+const totalCount = inputs[1];
+const totalCountOther = inputs[2];
+const totalFullCount = inputs[3];
+const totalCountRollback = inputs[4];
+
+let screens = document.querySelectorAll(".screen");
+
+console.log(title);
+console.log(calculateBtn);
+console.log(defaultBtn);
+console.log(addBtn);
+console.log(percentItems);
+console.log(numberItems);
+console.log(rangeInput);
+console.log(rangeSpan);
+
+console.log(total);
+console.log(totalCount);
+console.log(totalCountOther);
+console.log(totalFullCount);
+console.log(totalCountRollback);
+
+console.log(screens);
+
 const app = {
   data: {
     title: "",
@@ -32,13 +67,6 @@ const app = {
         title = title[0].toUpperCase() + title.substring(1);
       }
     } while (!isNaN(+title) && title !== null);
-
-    // let title = prompt("Как называется Ваш проект?", "Новый проект");
-    // if (title) {
-    //   title = title.trim();
-    //   title = title.toLowerCase();
-    //   title = title[0].toUpperCase() + title.substring(1);
-    // }
 
     app.data.title = title;
   },
@@ -77,10 +105,6 @@ const app = {
 
   // Стоимость работы (number)
   getScreenPrice: () => {
-    //   for (const screen of app.data.screens) {
-    //     app.data.screenPrice += +screen.price;
-    //   }
-
     app.data.screenPrice = app.data.screens.reduce((total, screen) => {
       return total + screen.price;
     }, app.data.screenPrice);
@@ -170,4 +194,4 @@ const app = {
   },
 };
 
-app.start();
+// app.start();
