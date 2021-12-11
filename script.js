@@ -8,6 +8,8 @@ const book5Li = books[5].querySelectorAll("li");
 const book6 = books[2].querySelector("ul");
 const book6Li = books[2].querySelectorAll("li");
 
+document.body.style.backgroundImage = "url(./image/you-dont-know-js.jpg)";
+
 adv.remove();
 book3title.textContent = "Книга 3. this и Прототипы Объектов";
 
