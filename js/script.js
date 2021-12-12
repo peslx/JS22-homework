@@ -18,23 +18,6 @@ const totalCountRollback = inputs[4];
 
 let screens = document.querySelectorAll(".screen");
 
-console.log(title);
-console.log(calculateBtn);
-console.log(defaultBtn);
-console.log(addBtn);
-console.log(percentItems);
-console.log(numberItems);
-console.log(rangeInput);
-console.log(rangeSpan);
-
-console.log(total);
-console.log(totalCount);
-console.log(totalCountOther);
-console.log(totalFullCount);
-console.log(totalCountRollback);
-
-console.log(screens);
-
 const app = {
   data: {
     title: "",
@@ -49,58 +32,57 @@ const app = {
     discountInfo: "",
   },
 
+  // Старт ввода данных
+  // start: () => {
+  //   app.getScreenPrice();
+  //   app.getAllServicePrices();
+  //   app.getFullPrice();
+  //   app.getServicePercentPrices(app.data.fullPrice, app.data.rollback);
+  //   app.getDiscountInfo(app.data.fullPrice);
+  // },
+
+  init: () => {
+    app.addTitle();
+    calculateBtn.addEventListener("click", app.start);
+    addBtn.addEventListener("click", app.addScreens);
+
+    app.logData();
+  },
+
+  start: () => {
+    app.countScreens();
+  },
+
+  addTitle: () => {
+    document.title = title.textContent;
+  },
+
+  addScreens: () => {
+    const extraScreen = screens[0].cloneNode(true);
+    screens[screens.length - 1].after(extraScreen);
+  },
+
+  countScreens: () => {
+    screens = document.querySelectorAll(".screen");
+    screens.forEach((screen, index) => {
+      const select = screen.querySelector("select");
+      const input = screen.querySelector("input");
+      const name = select.options[select.selectedIndex].textContent;
+
+      app.data.screens.push({
+        id: index,
+        name,
+        price: +select.value * +input.value,
+      });
+    });
+    console.log(app.data.screens);
+  },
+
   // Проверка на число (boolean)
   isNum: (num) => {
     return (
       !isNaN(parseFloat(num)) && isFinite(num) && !String(num).includes(" ")
     );
-  },
-
-  // Название проекта (string)
-  getTitle: () => {
-    let title;
-    do {
-      title = prompt("Как называется Ваш проект?", "Новый проект");
-      if (title) {
-        title = title.trim();
-        title = title.toLowerCase();
-        title = title[0].toUpperCase() + title.substring(1);
-      }
-    } while (!isNaN(+title) && title !== null);
-
-    app.data.title = title;
-  },
-
-  // Типы экранов (string)
-  getScreens: () => {
-    for (let i = 0; i < 2; i++) {
-      let name;
-
-      do {
-        name = prompt(
-          "Какие типы экранов нужно разработать",
-          "Простые, Сложные, Интерактивные"
-        );
-        if (name) {
-          name = name.trim();
-          name = name.toLowerCase();
-          name = name[0].toUpperCase() + name.substring(1);
-        }
-      } while (!isNaN(+name) && name !== null);
-
-      let price = 0;
-
-      do {
-        price = prompt("Сколько будет стоить данная работа?", "    100000n  ");
-      } while (!app.isNum(price) && price !== null);
-
-      app.data.screens.push({ id: i, name, price: +price });
-    }
-  },
-
-  // Адапитив (boolean)
-  isAdaptive: () => {
-    app.data.adaptive = confirm("Нужен ли адаптив на сайте?");
   },
 
   // Стоимость работы (number)
@@ -171,27 +153,9 @@ const app = {
     }
   },
 
-  // Старт ввода данных
-  startQuiz: () => {
-    app.getTitle();
-    app.getScreens();
-    app.isAdaptive();
-    app.getScreenPrice();
-    app.getAllServicePrices();
-    app.getFullPrice();
-    app.getServicePercentPrices(app.data.fullPrice, app.data.rollback);
-    app.getDiscountInfo(app.data.fullPrice);
-  },
-
-  logger: () => {
+  logData: () => {
     console.log(app.data);
-  },
-
-  start: () => {
-    app.startQuiz();
-    // app.logger(app);
-    app.logger();
   },
 };
 
-// app.start();
+app.init();
