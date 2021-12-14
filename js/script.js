@@ -34,7 +34,7 @@ const app = {
 
   init: () => {
     app.addTitle();
-    calculateBtn.addEventListener("click", app.start);
+    calculateBtn.addEventListener("click", app.checkData);
     addBtn.addEventListener("click", app.addScreens);
     rangeInput.addEventListener("input", app.getRollback);
   },
@@ -80,6 +80,19 @@ const app = {
       const input = screen.querySelector("input");
       app.data.screensCount += +input.value;
     });
+  },
+
+  checkData: () => {
+    app.data.error= false;
+    screens = document.querySelectorAll(".screen");
+    screens.forEach((screen) => {
+      const select = screen.querySelector("select");
+      const input = screen.querySelector("input");
+      if (select.value ==="" || input.value === "") {
+        app.data.error= true;
+      } 
+    })
+    !app.data.error ? app.start() : alert('Заполните поля!');
   },
 
   countScreens: () => {
