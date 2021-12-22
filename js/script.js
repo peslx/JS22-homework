@@ -28,6 +28,7 @@ const app = {
     percentPrices: 0,
     fixedPrices: 0,
     fullPrice: 0,
+    cmsPrice: 0,
     totalPrice: 0,
     rollback: 0,
     err: false,
@@ -65,6 +66,7 @@ const app = {
     layoutPrice.value = this.data.screenPrice;
     totalScreensCount.value = this.data.screensCount;
     totalServicesPrice.value = this.data.percentPrices + this.data.fixedPrices;
+
     fullPrice.value = this.data.fullPrice;
     totalPrice.value = this.data.totalPrice;
   },
@@ -108,17 +110,23 @@ const app = {
 
   revealCMS: function (params) {
     const cms = document.querySelector(".cms");
-    const select = cms.querySelector(".cms");
+    const select = document.getElementById("cms-select");
 
-    console.dir(cms);
+    console.log(select.options[select.selectedIndex].textContent);
     cms.querySelector("input[type=checkbox]").addEventListener("change", () => {
       if (cms.querySelector("input[type=checkbox]").checked) {
         cms.querySelector(".hidden-cms-variants").style.display = "flex";
-        // cms.querySelector(".main-controls__input").style.display = "flex";
+        select.addEventListener("change", () => {
+          if (select.options[select.selectedIndex].value === "other") {
+            cms.querySelector(".main-controls__input").style.display = "flex";
+          } else {
+            cms.querySelector(".main-controls__input").style.display = "none";
+          }
+        });
       } else {
         cms.querySelector(".hidden-cms-variants").style.display = "none";
-        // cms.querySelector(".main-controls__input").style.display = "none";
-        // cms.querySelector("input[type=text]").value = "";
+        cms.querySelector(".main-controls__input").style.display = "none";
+        cms.querySelector("input[type=text]").value = "";
       }
     });
   },
@@ -177,6 +185,9 @@ const app = {
     // Полная стоимость
     this.data.fullPrice =
       this.data.screenPrice + this.data.percentPrices + this.data.fixedPrices;
+
+    // Стоимость интеграции CMS
+    this.data.cmsPrice = (this.data.fullPrice * 50) / 100;
 
     // Cтоимость за вычетом отката посреднику
     this.data.totalPrice = Math.ceil(
