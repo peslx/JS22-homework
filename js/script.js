@@ -38,6 +38,7 @@ const app = {
     calculateBtn.addEventListener("click", this.checkData);
     addBtn.addEventListener("click", this.addScreens);
     rangeInput.addEventListener("input", this.getRollback);
+    this.revealCMS();
   },
 
   start: function () {
@@ -103,6 +104,23 @@ const app = {
       .forEach((input) => {
         input.setAttribute("disabled", true);
       });
+  },
+
+  revealCMS: function (params) {
+    const cms = document.querySelector(".cms");
+    const select = cms.querySelector(".cms");
+
+    console.dir(cms);
+    cms.querySelector("input[type=checkbox]").addEventListener("change", () => {
+      if (cms.querySelector("input[type=checkbox]").checked) {
+        cms.querySelector(".hidden-cms-variants").style.display = "flex";
+        // cms.querySelector(".main-controls__input").style.display = "flex";
+      } else {
+        cms.querySelector(".hidden-cms-variants").style.display = "none";
+        // cms.querySelector(".main-controls__input").style.display = "none";
+        // cms.querySelector("input[type=text]").value = "";
+      }
+    });
   },
 
   countScreens: function () {
