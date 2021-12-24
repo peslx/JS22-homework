@@ -183,10 +183,12 @@ const app = {
   swapButtons: function () {
     if (!this.data.buttonsSwapped) {
       this.data.buttonsSwapped = true;
+      addBtn.style.display = "none";
       calculateBtn.style.display = "none";
       defaultBtn.style.display = "flex";
     } else {
       this.data.buttonsSwapped = false;
+      addBtn.style.display = "flex";
       calculateBtn.style.display = "flex";
       defaultBtn.style.display = "none";
     }
