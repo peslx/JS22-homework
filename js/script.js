@@ -58,6 +58,7 @@ const app = {
   },
 
   reset: function () {
+    console.log("reset: " + this);
     app.swapButtons();
     app.resetScreens();
     app.resetServices();
@@ -92,6 +93,7 @@ const app = {
   },
 
   getRollback: function () {
+    console.log("getRollback: " + this);
     app.data.rollback = rangeInput.value;
     rangeSpan.textContent = `${rangeInput.value}%`;
     app.getPrices();
@@ -139,6 +141,7 @@ const app = {
   },
 
   checkData: function () {
+    console.log("checkData: " + this);
     app.data.err = false;
     screens = document.querySelectorAll(".screen");
     screens.forEach((screen) => {
@@ -211,6 +214,7 @@ const app = {
           if (select.options[select.selectedIndex].value === "other") {
             CMSinput.style.display = "flex";
             CMSinput.addEventListener("change", function (e) {
+              console.log("217 " + this);
               app.data.cmsPercent = +e.target.value;
             });
           } else if (!isNaN(select.options[select.selectedIndex].value)) {
