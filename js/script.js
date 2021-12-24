@@ -40,10 +40,10 @@ const app = {
 
   init: function () {
     this.addTitle();
-    calculateBtn.addEventListener("click", this.checkData);
-    defaultBtn.addEventListener("click", this.reset);
+    calculateBtn.addEventListener("click", this.checkData.bind(this));
+    defaultBtn.addEventListener("click", this.reset.bind(this));
     addBtn.addEventListener("click", this.addScreens);
-    rangeInput.addEventListener("input", this.getRollback);
+    rangeInput.addEventListener("input", this.getRollback.bind(this));
     this.revealCMS();
   },
 
@@ -58,17 +58,17 @@ const app = {
   },
 
   reset: function () {
-    console.log("reset: " + this);
-    app.swapButtons();
-    app.resetScreens();
-    app.resetServices();
-    app.hideCMS();
-    app.resetInputs();
-    app.resetData();
-    app.resetRollback();
-    app.parseResults();
+    console.log(this);
+    this.swapButtons();
+    this.resetScreens();
+    this.resetServices();
+    this.hideCMS();
+    this.resetInputs();
+    this.resetData();
+    this.resetRollback();
+    this.parseResults();
     console.log("Сброс!");
-    app.logData();
+    this.logData();
   },
 
   resetData: function () {
@@ -93,11 +93,11 @@ const app = {
   },
 
   getRollback: function () {
-    console.log("getRollback: " + this);
-    app.data.rollback = rangeInput.value;
+    console.log(this);
+    this.data.rollback = rangeInput.value;
     rangeSpan.textContent = `${rangeInput.value}%`;
-    app.getPrices();
-    app.parseResults();
+    this.getPrices();
+    this.parseResults();
   },
 
   resetRollback: function () {
@@ -127,7 +127,6 @@ const app = {
     screens.forEach((item, index) => {
       index > 0 ? item.remove() : null;
     });
-    console.log(screens[0]);
     screens[0].querySelector("select").value = "";
     screens[0].querySelector("input").value = "";
   },
@@ -141,17 +140,17 @@ const app = {
   },
 
   checkData: function () {
-    console.log("checkData: " + this);
-    app.data.err = false;
+    console.log(this);
+    this.data.err = false;
     screens = document.querySelectorAll(".screen");
     screens.forEach((screen) => {
       const select = screen.querySelector("select");
       const input = screen.querySelector("input");
       if (select.value === "" || input.value === "") {
-        app.data.err = true;
+        this.data.err = true;
       }
     });
-    !app.data.err ? app.start() : alert("Заполните поля!");
+    !this.data.err ? this.start() : alert("Заполните поля!");
   },
 
   disableInputs: function () {
@@ -188,7 +187,7 @@ const app = {
       defaultBtn.style.display = "flex";
     } else {
       this.data.buttonsSwapped = false;
-      addBtn.style.display = "flex";
+      addBtn.style.display = "inline-block";
       calculateBtn.style.display = "flex";
       defaultBtn.style.display = "none";
     }
@@ -215,12 +214,12 @@ const app = {
         select.addEventListener("change", () => {
           if (select.options[select.selectedIndex].value === "other") {
             CMSinput.style.display = "flex";
-            CMSinput.addEventListener("change", function (e) {
-              console.log("217 " + this);
-              app.data.cmsPercent = +e.target.value;
+            CMSinput.addEventListener("change", (e) => {
+              console.log(this);
+              this.data.cmsPercent = +e.target.value;
             });
           } else if (!isNaN(select.options[select.selectedIndex].value)) {
-            app.data.cmsPercent = +select.options[select.selectedIndex].value;
+            this.data.cmsPercent = +select.options[select.selectedIndex].value;
           } else {
             CMSinput.style.display = "none";
           }
