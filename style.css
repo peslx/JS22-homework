@@ -1,5 +1,11 @@
 * {
   box-sizing: border-box;
-  /* padding: 0; */
-  /* margin: 0; */
+  padding: 0;
+  margin: 0;
+}
+
+.square {
+  text-align: center;
+  font-family: sans-serif;
+  line-height: 100px;
 }
