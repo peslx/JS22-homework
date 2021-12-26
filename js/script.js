@@ -1,8 +1,6 @@
 "Use strict";
 
 const title = document.getElementsByTagName("h1")[0];
-// const calculateBtn = document.getElementsByClassName("handler_btn")[0];
-// const defaultBtn = document.getElementsByClassName("handler_btn")[1];
 const calculateBtn = document.getElementById("start");
 const defaultBtn = document.getElementById("reset");
 const addBtn = document.querySelector(".screen-btn");
@@ -10,7 +8,6 @@ const percentPriceItems = document.querySelectorAll(".other-items.percent");
 const fixedPriceItems = document.querySelectorAll(".other-items.number");
 const rangeInput = document.querySelector(".rollback ").querySelector("input");
 const rangeSpan = document.querySelector(".rollback ").querySelector("span ");
-
 const inputs = document.getElementsByClassName("total-input");
 const layoutPrice = inputs[0];
 const totalScreensCount = inputs[1];
@@ -106,12 +103,10 @@ const app = {
   },
 
   parseResults: function () {
-    // console.log("Вывод результатов расчетов");
     layoutPrice.value = this.data.screenPrice;
     totalScreensCount.value = this.data.screensCount;
     totalServicesPrice.value =
       this.data.percentPrices + this.data.fixedPrices + this.data.cmsPrice;
-
     fullPrice.value = this.data.fullPrice;
     totalPrice.value = this.data.totalPrice;
   },
@@ -141,7 +136,6 @@ const app = {
   },
 
   checkData: function () {
-    console.log("checkData: " + this);
     app.data.err = false;
     screens = document.querySelectorAll(".screen");
     screens.forEach((screen) => {
@@ -216,7 +210,6 @@ const app = {
           if (select.options[select.selectedIndex].value === "other") {
             CMSinput.style.display = "flex";
             CMSinput.addEventListener("change", function (e) {
-              console.log("217 " + this);
               app.data.cmsPercent = +e.target.value;
             });
           } else if (!isNaN(select.options[select.selectedIndex].value)) {
